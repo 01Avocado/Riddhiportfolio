@@ -1,7 +1,7 @@
 import { useScroll } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import gsap from "gsap";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { isMobile } from "react-device-detect";
 import * as THREE from "three";
 import { usePortalStore } from "@stores";
@@ -13,6 +13,9 @@ const Projects = () => {
   const { camera } = useThree();
   const isActive = usePortalStore((state) => state.activePortalId === "projects");
   const data = useScroll();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true) }, []);
+  const isMobileView = mounted && isMobile;
 
   useEffect(() => {
     // Hide scrollbar when active.
@@ -39,7 +42,7 @@ const Projects = () => {
     <group>
       <Wanderer rotation={new THREE.Euler(0, Math.PI / 6, 0)} scale={new THREE.Vector3(1.5, 1.5, 1.5)} position={new THREE.Vector3(0, -1, -1)}/>
       <ProjectsCarousel />
-      { isActive && isMobile && <TouchPanControls /> }
+      { isActive && isMobileView && <TouchPanControls /> }
     </group>
   );
 };

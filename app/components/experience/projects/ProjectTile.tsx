@@ -22,6 +22,9 @@ const ProjectTile = ({ project, index, position, rotation, activeId, onClick }: 
   const hoverAnimRef = useRef<gsap.core.Timeline | null>(null);
   const [hovered, setHovered] = useState(false);
   const isProjectSectionActive = usePortalStore((state) => state.activePortalId === "projects");
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true) }, []);
+  const isMobileView = mounted && isMobile;
 
   const titleProps = useMemo(() => ({
     font: "./soria-font.ttf",
@@ -67,10 +70,10 @@ const ProjectTile = ({ project, index, position, rotation, activeId, onClick }: 
   }, [hovered]);
 
   useEffect(() => {
-    if (isMobile) {
+    if (isMobileView) {
       setHovered(activeId === index);
     }
-  }, [isMobile, activeId]);
+  }, [isMobileView, activeId]);
 
   useEffect(() => {
     if (projectRef.current) {
@@ -96,8 +99,8 @@ const ProjectTile = ({ project, index, position, rotation, activeId, onClick }: 
       position={position}
       rotation={rotation}
       onClick={onClick}
-      onPointerOver={() => !isMobile && isProjectSectionActive && setHovered(true)}
-      onPointerOut={() => !isMobile && isProjectSectionActive && setHovered(false)}>
+      onPointerOver={() => !isMobileView && isProjectSectionActive && setHovered(true)}
+      onPointerOut={() => !isMobileView && isProjectSectionActive && setHovered(false)}>
       <group ref={projectRef}>
         <mesh>
           <planeGeometry args={[4.2, 2, 1]} />

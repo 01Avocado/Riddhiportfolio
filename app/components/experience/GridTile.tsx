@@ -3,7 +3,7 @@ import { Edges, MeshPortalMaterial, Text, TextProps, useScroll } from '@react-th
 import { useFrame, useThree } from '@react-three/fiber';
 import { usePortalStore } from '@stores';
 import gsap from "gsap";
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { isMobile } from 'react-device-detect';
 import * as THREE from 'three';
 import { TriangleGeometry } from './Triangle';
@@ -29,6 +29,9 @@ const GridTile = (props: GridTileProps) => {
   const isActive = usePortalStore((state) => state.activePortalId === id);
   const activePortalId = usePortalStore((state) => state.activePortalId);
   const data = useScroll();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true) }, []);
+  const isMobileView = mounted && isMobile;
 
   useEffect(() => {
     // Hanlde the hover box and title animation for mobile.
@@ -163,7 +166,7 @@ const GridTile = (props: GridTileProps) => {
   };
 
   const getGeometry = () => {
-    if (!isMobile) {
+    if (!isMobileView) {
       return <planeGeometry args={[4, 4, 1]} />
     }
 

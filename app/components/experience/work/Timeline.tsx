@@ -12,7 +12,7 @@ import { WorkTimelinePoint } from "@types";
 const reusableLeft = new THREE.Vector3(-0.3, 0, -0.1);
 const reusableRight = new THREE.Vector3(0.3, 0, -0.1);
 
-const TimelinePoint = ({ point, diff }: { point: WorkTimelinePoint, diff: number }) => {
+const TimelinePoint = ({ point, diff, isMobileView }: { point: WorkTimelinePoint, diff: number, isMobileView: boolean }) => {
   const getPoint = useMemo(() => {
     switch (point.position) {
       case 'left': return reusableLeft;
@@ -38,7 +38,7 @@ const TimelinePoint = ({ point, diff }: { point: WorkTimelinePoint, diff: number
   }), [textProps]);
 
   return (
-    <group position={point.point} scale={isMobile ? 0.35 : 0.6}>
+    <group position={point.point} scale={isMobileView ? 0.35 : 0.6}>
       <Box args={[0.2, 0.2, 0.2]} position={[0, 0, -0.1]} scale={[1 - diff, 1 - diff, 1 - diff]}>
         <meshBasicMaterial color="white" wireframe />
         <Edges color="white" lineWidth={1.5} />
@@ -74,11 +74,14 @@ const Timeline = ({ progress }: { progress: number }) => {
 
   const [visibleDashedCurvePoints, setVisibleDashedCurvePoints] = useState<THREE.Vector3[]>([]);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true) }, []);
+  const isMobileView = mounted && isMobile;
 
   useFrame((_, delta) => {
     if (isActive) {
       const position = curve.getPoint(progress);
-      camera.position.x = THREE.MathUtils.damp(camera.position.x, (isMobile ? -1 : -2) + position.x, 4, delta);
+      camera.position.x = THREE.MathUtils.damp(camera.position.x, (isMobileView ? -1 : -2) + position.x, 4, delta);
       camera.position.y = THREE.MathUtils.damp(camera.position.y, -39 + position.z, 4, delta);
       camera.position.z = THREE.MathUtils.damp(camera.position.z, 13 - position.y, 4, delta);
     }
@@ -137,7 +140,7 @@ const Timeline = ({ progress }: { progress: number }) => {
       <group ref={groupRef}>
         {visibleTimelinePoints.map((point, i) => {
           const diff = Math.min(2 * Math.max(i - (progress * (timeline.length - 1)), 0), 1);
-          return <TimelinePoint point={point} key={i} diff={diff} />;
+          return <TimelinePoint point={point} key={i} diff={diff} isMobileView={isMobileView} />;
         })}
       </group>
     </group>
