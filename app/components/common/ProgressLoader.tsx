@@ -6,14 +6,20 @@ import { isMobile } from 'react-device-detect';
  * Partially AI Generated
  */
 const ProgressLoader = ({ progress }: { progress: number }) => {
+  const [mounted, setMounted] = useState(false);
   const strokeWidth = 3;
   const [windowSize, setWindowSize] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
+    width: 0,
+    height: 0,
   });
 
   // Effect to update dimensions on window resize
   useEffect(() => {
+    setMounted(true);
+    setWindowSize({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
     // Handler to call on window resize
     function handleResize() {
       setWindowSize({
@@ -56,7 +62,9 @@ const ProgressLoader = ({ progress }: { progress: number }) => {
       return null; // Or return a minimal placeholder
   }
 
-  if (isMobile) {
+  const isMobileView = mounted && isMobile;
+
+  if (isMobileView) {
     return (
       <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none">
         <div className="relative w-[100px] transition-all duration-500 font-sans font-bold"

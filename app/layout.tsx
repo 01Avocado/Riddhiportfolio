@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   creator: "Riddhi Kulkarni",
   publisher: "Riddhi Kulkarni",
   icons: {
-    icon: '/logo.ico',
+    icon: '/favicon.ico',
   },
   formatDetection: {
     email: false,
@@ -74,8 +74,8 @@ export default function RootLayout({
         className={`${soriaFont.variable} ${vercettiFont.variable} font-sans antialiased`}
       >
         {children}
+        <GoogleAnalytics gaId={'G-7WD4HM3XRE'} />
       </body>
-      <GoogleAnalytics gaId={'G-7WD4HM3XRE'} />
     </html>
   );
 }

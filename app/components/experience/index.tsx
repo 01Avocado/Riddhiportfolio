@@ -1,7 +1,7 @@
 import { Text, useScroll } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { usePortalStore } from "@stores";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { isMobile } from "react-device-detect";
 import * as THREE from 'three';
 import GridTile from "./GridTile";
@@ -13,6 +13,9 @@ const Experience = () => {
   const groupRef = useRef<THREE.Group>(null);
   const data = useScroll();
   const isActive = usePortalStore((state) => !!state.activePortalId);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true) }, []);
+  const isMobileView = mounted && isMobile;
 
   const fontProps = {
     font: "./soria-font.ttf",
@@ -42,7 +45,7 @@ const Experience = () => {
   const getTitle = () => {
     const title = 'experience'.toUpperCase();
     return title.split('').map((char, i) => {
-      const diff = isMobile ? 0.4 : 0.8;
+      const diff = isMobileView ? 0.4 : 0.8;
       return (
         <Text key={i} {...fontProps} position={[i * diff, 2, 1]}>{char}</Text>
       );
@@ -56,7 +59,7 @@ const Experience = () => {
         <shadowMaterial opacity={0.1} />
       </mesh> */}
       <group rotation={[0, 0, Math.PI / 2]}>
-        <group ref={titleRef} position={[isMobile ? -1.8 : -3.6, 2, -2]}>
+        <group ref={titleRef} position={[isMobileView ? -1.8 : -3.6, 2, -2]}>
           {getTitle()}
         </group>
 
@@ -65,14 +68,14 @@ const Experience = () => {
             id="work"
             color='#b9c6d6'
             textAlign='left'
-            position={new THREE.Vector3(isMobile ? -1 : -2, 0, isMobile ? 0.4 : 0)}>
+            position={new THREE.Vector3(isMobileView ? -1 : -2, 0, isMobileView ? 0.4 : 0)}>
             <Work/>
           </GridTile>
           <GridTile title='SIDE PROJECTS'
             id="projects"
             color='#bdd1e3'
             textAlign='right'
-            position={new THREE.Vector3(isMobile ? 1 : 2, 0, 0)}>
+            position={new THREE.Vector3(isMobileView ? 1 : 2, 0, 0)}>
             <Projects/>
           </GridTile>
         </group>

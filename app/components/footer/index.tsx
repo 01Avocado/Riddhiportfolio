@@ -10,6 +10,10 @@ import { FooterLink } from "../../types";
 const FooterLinkItem = ({ link }: { link: FooterLink }) => {
   const textRef = useRef<THREE.Group>(null);
   const [hovered, setHovered] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true) }, []);
+  const isMobileView = mounted && isMobile;
+
   const onPointerOver = () => setHovered(true);
   const onPointerOut = () => setHovered(false);
   const onClick = () => window.open(link.url, '_blank');
@@ -73,7 +77,7 @@ const FooterLinkItem = ({ link }: { link: FooterLink }) => {
 
   useCursor(hovered);
 
-  if (isMobile) {
+  if (isMobileView) {
     return <Svg onClick={onClick} scale={0.0015} position={[0.1, 0.25, 0]} src={link.icon} />;
   }
 
@@ -87,6 +91,9 @@ const FooterLinkItem = ({ link }: { link: FooterLink }) => {
 const Footer = () => {
   const groupRef = useRef<THREE.Group>(null);
   const data = useScroll();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true) }, []);
+  const isMobileView = mounted && isMobile;
 
   useFrame(() => {
     const d = data.range(0.8, 0.2);
@@ -98,7 +105,7 @@ const Footer = () => {
   const getLinks = () => {
     return FOOTER_LINKS.map((link, i) => {
       return (
-        <group key={i} position={[i * (isMobile ? 1.1 : 2), 0, 0]}>
+        <group key={i} position={[i * (isMobileView ? 1.1 : 2), 0, 0]}>
           <FooterLinkItem link={link}/>
         </group>
       );
@@ -107,7 +114,7 @@ const Footer = () => {
 
   return (
     <group position={[0, -44, 18]} rotation={[-Math.PI / 2, 0, 0]} ref={groupRef}>
-      <group position={[isMobile ? -2.5 : -4, 0, 0]}>
+      <group position={[isMobileView ? -2.5 : -4, 0, 0]}>
         { getLinks() }
       </group>
     </group>

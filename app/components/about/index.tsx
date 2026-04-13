@@ -2,17 +2,22 @@
 
 import { Text, useScroll } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { isMobile } from "react-device-detect";
 import * as THREE from "three";
 
 const About = () => {
   const data = useScroll();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true) }, []);
+
   const groupRef = useRef<THREE.Group>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const titleRef = useRef<any>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const textRef = useRef<any>(null);
+
+  const isMobileView = mounted && isMobile;
 
   const fontProps = {
     font: "./soria-font.ttf",
@@ -43,8 +48,8 @@ const About = () => {
     <group ref={groupRef} position={[0, -10, 0]} renderOrder={100}>
       <Text
         {...fontProps}
-        fontSize={isMobile ? 1.5 : 2.5}
-        position={[0, isMobile ? 3.5 : 4.5, 0]}
+        fontSize={isMobileView ? 1.5 : 2.5}
+        position={[0, isMobileView ? 3.5 : 4.5, 0]}
         ref={titleRef}
         material-depthTest={false}
       >
@@ -52,8 +57,8 @@ const About = () => {
       </Text>
       <Text
         {...fontProps}
-        fontSize={isMobile ? 0.4 : 0.75}
-        maxWidth={isMobile ? 6 : 12}
+        fontSize={isMobileView ? 0.4 : 0.75}
+        maxWidth={isMobileView ? 6 : 12}
         textAlign="center"
         position={[0, 0, 0]}
         ref={textRef}
