@@ -1,19 +1,21 @@
 'use client';
 
-import { Text } from "@react-three/drei";
+import { Text, useScroll } from "@react-three/drei";
 
 import { useProgress } from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
 import gsap from "gsap";
 import { useEffect, useRef } from "react";
-import * as THREE from "three";
 import CloudContainer from "../models/Cloud";
 import StarsContainer from "../models/Stars";
 import WindowModel from "../models/WindowModel";
 import TextWindow from "./TextWindow";
 
 const Hero = () => {
-  const titleRef = useRef<THREE.Mesh>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const titleRef = useRef<any>(null);
   const { progress } = useProgress();
+  const data = useScroll();
 
   useEffect(() => {
     if (progress === 100 && titleRef.current) {
@@ -22,11 +24,19 @@ const Hero = () => {
         duration: 1,
         // delay: 1.5,
       }, {
-        y: 0,
+        y: 2,
         duration: 3
       });
     }
   }, [progress]);
+
+  useFrame(() => {
+    // Fade out title as we scroll
+    if (titleRef.current) {
+      const opacity = 1 - data.range(0, 0.15);
+      titleRef.current.fillOpacity = opacity;
+    }
+  });
 
   const fontProps = {
     font: "./soria-font.ttf",
