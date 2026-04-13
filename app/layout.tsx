@@ -14,7 +14,7 @@ const vercettiFont = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Riddhi Kulkarni ✌️",
+  title: "Riddhi Kulkarni",
   description: "An AI/ML engineer by profession, a creative at heart.",
   keywords: "Riddhi Kulkarni, AI Engineer, ML Engineer, Python Developer, Deep Learning, Computer Vision, Reinforcement Learning, Research, Portfolio",
   authors: [{ name: "Riddhi Kulkarni" }],
@@ -72,7 +72,7 @@ export default function RootLayout({
       >
         {children}
       </body>
-      <GoogleAnalytics gaId={'G-7WD4HM3XRE'}/>
+      <GoogleAnalytics gaId={'G-7WD4HM3XRE'} />
     </html>
   );
 }
