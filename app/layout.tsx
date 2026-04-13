@@ -20,6 +20,9 @@ export const metadata: Metadata = {
   authors: [{ name: "Riddhi Kulkarni" }],
   creator: "Riddhi Kulkarni",
   publisher: "Riddhi Kulkarni",
+  icons: {
+    icon: '/logo.ico',
+  },
   formatDetection: {
     email: false,
     address: false,
